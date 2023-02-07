@@ -2,7 +2,7 @@ const express = require('express')
 const bcrypt = require('bcryptjs')
 const User = require('../models/User.model')
 const router = express.Router()
-const { isLoggedIn } = require('../middleware/route-guard')
+const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard')
 
 
 /* GET home page */
