@@ -6,6 +6,8 @@ const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard')
 
 
 /* GET home page */
+
+
 router.get('/signup', (req, res) => {
     res.render('auth/signup')
 })
@@ -43,6 +45,7 @@ router.post('/signup', async (req, res) => {
     }
 })
 
+
 router.get('/login', (req, res) => {
     res.render('auth/login')
 })
@@ -69,11 +72,14 @@ router.post('/login', async (req, res) => {
     }
 })
 
+router.get('/private', (req, res, next) => {
+    res.render('auth/private')
+})
+
 router.get('/profile', isLoggedIn, (req, res) => {
     console.log('SESSION =====> ', req.session)
 
     res.render('profile', { user: req.session.user })
 })
-
 
 module.exports = router
