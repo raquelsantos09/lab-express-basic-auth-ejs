@@ -5,32 +5,16 @@ const router = express.Router()
 const { isLoggedIn } = require('../middleware/route-guard')
 
 
-/*
-
-
-router.post('/signup', async (req, res, next) => {
-    console.log(req.body)
-    const body = { ...req.body }
-    const salt = bcrypt.genSaltSync(13)
-    const passswordHash = bcrypt.hashSync(body.password, salt)
-    console.log(passswordHash)
-    delete body.password
-    body.passswordHash = passswordHash
-    await User.create(body)
-    res.send(body)
-})
-*/
-
 /* GET home page */
 router.get('/signup', (req, res) => {
-    res.render('signup')
+    res.render('auth/signup')
 })
 
 router.post('/signup', async (req, res) => {
     const body = { ...req.body }
 
     if (body.password.length < 6) {
-        res.render('signup', { errorMessage: 'Password too short', body: req.body })
+        res.render('auth/signup', { errorMessage: 'Password too short', body: req.body })
     } else {
         const salt = bcrypt.genSaltSync(13)
         const passwordHash = bcrypt.hashSync(body.password, salt)
@@ -41,16 +25,16 @@ router.post('/signup', async (req, res) => {
 
         try {
             await User.create(body)
-            res.send(body)
+            res.redirect('/auth/login')
         } catch (error) {
             if (error.code === 11000) {
                 console.log('Duplicate !')
-                res.render('signup', {
+                res.render('auth/signup', {
                     errorMessage: 'Username already used !',
                     userData: req.body,
                 })
             } else {
-                res.render('signup', {
+                res.render('auth/signup', {
                     errorMessage: error,
                     userData: req.body,
                 })
@@ -60,7 +44,7 @@ router.post('/signup', async (req, res) => {
 })
 
 router.get('/login', (req, res) => {
-    res.render('login')
+    res.render('auth/login')
 })
 
 router.post('/login', async (req, res) => {
